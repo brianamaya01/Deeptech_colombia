@@ -3,7 +3,7 @@ name: Deploy DeepTech Dashboard → GitHub Pages
 on:
   push:
     branches: [main]
-  workflow_dispatch:        # permite lanzar manualmente desde GitHub
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,20 +26,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: deeptech-app/package-lock.json
 
       - name: Install dependencies
-        working-directory: deeptech-app
         run: npm ci
 
       - name: Build
-        working-directory: deeptech-app
         run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: deeptech-app/dist
+          path: dist
 
   deploy:
     needs: build

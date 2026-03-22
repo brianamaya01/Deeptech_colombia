@@ -1,7 +1,7 @@
 node_modules/
-deeptech-app/node_modules/
-deeptech-app/dist/
+dist/
 .vite/
 *.local
 .DS_Store
 Thumbs.db
+deeptech-app/
