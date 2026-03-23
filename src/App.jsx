@@ -307,18 +307,21 @@ const SectionTitle = ({ children, accent }) => (
 const InfoButton = ({ text, color = C.primary }) => {
   const [show, setShow] = useState(false);
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      style={{ position: "relative" }}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
       <button
-        onClick={e => { e.stopPropagation(); setShow(v => !v); }}
-        title="¿Qué muestra este gráfico?"
         style={{
           background: show ? `${color}22` : "transparent",
           border: `1px solid ${show ? color : C.border}`,
           borderRadius: "50%", width: 22, height: 22,
           color: show ? color : C.muted,
-          cursor: "pointer", fontSize: 12,
+          cursor: "default", fontSize: 12,
           display: "flex", alignItems: "center", justifyContent: "center",
           transition: "all 0.2s", padding: 0, lineHeight: 1,
+          pointerEvents: "none",
         }}
       >ⓘ</button>
       {show && (
@@ -328,6 +331,7 @@ const InfoButton = ({ text, color = C.primary }) => {
           borderRadius: 10, padding: "12px 14px", width: 270,
           fontSize: 10, color: C.text, lineHeight: 1.65,
           boxShadow: "0 8px 32px #00000090",
+          pointerEvents: "none",
         }}>
           <div style={{ color, fontWeight: 700, marginBottom: 6, fontSize: 11 }}>ℹ️ ¿Qué muestra?</div>
           {text}
