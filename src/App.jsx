@@ -5,6 +5,436 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, Treemap
 } from "recharts";
 
+/* ─── TRANSLATIONS ─── */
+const T = {
+  es: {
+    headerSub: "REPORTE COMPARATIVO 2023 · 2024 · 2025",
+    langBtn: "EN",
+    tabs: ["📊 Resumen 2025","📈 Evolución 3 Años","🏭 Sectores","🌐 Ecosistema","💸 Financiación","🌱 Impacto"],
+    kpiLabels: ["EBCTs Mapeadas","Capital Levantado","Valoración Total","Empleos Creados","Founder Mujer","Vinc. Biodiversidad"],
+    kpiSubs: ["+100% vs 2024","+80% vs 2024","USD estimado 2025","+64% vs 2024","+9pp vs 2024","Bioeconomía conocimiento"],
+    kpiInfos: [
+      "Empresas de Base Científico-Tecnológica (EBCTs) identificadas en Colombia en 2025. Incluye startups activas con base científica demostrable. Creció 3x desde 2023.",
+      "Capital total acumulado levantado por las EBCTs (equity, grants, deuda convertible). Primera vez que el ecosistema supera USD 100M. Aún 3x por debajo de Chile con igual número de startups.",
+      "Valoración agregada del portafolio usando metodología conservadora (múltiplo de ingresos/capital). La variación vs. 2024 refleja ajuste metodológico y mayor base de empresas en etapa temprana.",
+      "Empleos directos de tiempo completo generados por las EBCTs en 2025. El 22% del talento tiene Maestría o PhD. Los empleos deeptech generan 3-5x más valor económico que el promedio nacional.",
+      "Porcentaje de EBCTs con al menos una mujer en el equipo fundador. Colombia DeepTech lidera diversidad de género en LATAM, con un incremento de +20pp en tan solo 2 años (2023→2025).",
+      "Porcentaje de EBCTs cuya propuesta de valor está directamente vinculada a los recursos de biodiversidad de Colombia. Colombia es el 2° país más biodiverso del mundo — ventaja competitiva única.",
+    ],
+    sVerticals: "Verticales DeepTech 2025",
+    sTechs: "Tecnologías Habilitantes 2025",
+    sMaturity: "Madurez Tecnológica 2025",
+    sGeo: "Distribución Geográfica 2025",
+    insightAgriFood: "AgriFood creció +13pp — Colombia como potencia agroalimentaria global basada en ciencia y biodiversidad.",
+    insightIA: "IA escala al 31% de adopción primaria — BioTech baja por especialización del portafolio.",
+    insightMaturity: "56% aún en I+D/POC → ventana de oportunidad para capital semilla y programas de aceleración científica.",
+    insightGeo: "Aparición incipiente en Pasto, Pereira y Yumbo · Oriente duplicó participación (6%→12%) vs 2024.",
+    sEvolution: "Evolución del Ecosistema DeepTech Colombia",
+    evolutionCards: [
+      {label:"Crecimiento EBCTs", val:"3.1x", sub:"32 → 49 → 98"},
+      {label:"Capital acumulado", val:"+80%", sub:"$60M → $108M USD"},
+      {label:"Paridad de género", val:"+20pp", sub:"37.5% → 49% → 58%"},
+      {label:"AgriFood Tech", val:"+15pp", sub:"20% → 22% → 35%"},
+    ],
+    sStartups: "EBCTs / Startups Mapeadas",
+    sGender: "Diversidad de Género — % Startups con Fundadora",
+    sCapital: "Capital Levantado (USD Millones)",
+    sEmpleos: "Empleos Generados",
+    sVerticalsEvol: "Evolución de Verticales — % de EBCTs por Año",
+    note2023: "* 2023 estimado a partir de narrativa del reporte (datos cualitativos). 2024 y 2025 datos cuantitativos.",
+    sTechEvol: "Evolución de Tecnologías Habilitantes",
+    noteTech: "* 2023: multi-selección (las startups podían indicar múltiples techs, total >100%). 2024-2025: tecnología primaria (suma ≈ 100%).",
+    insightStartups: "El ecosistema triplicó su tamaño en 2 años. El salto 2024→2025 (+100%) refleja consolidación metodológica y madurez del mapeo.",
+    insightGender: "+20pp en 2 años: Colombia DeepTech lidera diversidad de género en LATAM. 49% empleados mujeres en 2025.",
+    insightCapital: "Primera vez que el ecosistema supera USD 100M en capital acumulado. Aún 3X por debajo de Chile con el mismo # de startups.",
+    insightEmpleos: "22% con Maestría/PhD. Empleos DeepTech generan 3-5x más valor económico que el promedio nacional.",
+    insightAgriEvol: "AgriFood: vertical de mayor crecimiento. Colombia biodiverso + demanda global de proteína alternativa = ventaja competitiva estructural.",
+    insightEnergy: "Energía/Clima: bajó en % relativo pero creció en # absoluto. La nueva categoría \"CleanTech Materiales\" absorbió parte de la demanda.",
+    insightTech: "IA está convergiendo con BioTech: el ecosistema migra hacia soluciones que combinan inteligencia artificial con biología molecular.",
+    sectorHeader: "Sectores DeepTech Colombia — Análisis Comparativo 2023 · 2024 · 2025",
+    sectorSubtitle: "Verticales, desafíos, empresas y tendencias por sector. Haz clic en un sector para ver el detalle.",
+    selected: "Seleccionado",
+    sectorDesc: "Descripción del Sector",
+    enablingTechs: "Tecnologías Habilitantes",
+    companiesPerYear: "Empresas por Año",
+    growth2023_2025: "Crecimiento 2023 → 2025",
+    companies: "empresas",
+    pctPortfolio: "% del portafolio total",
+    sChallenges: "⚠️ Desafíos del Sector",
+    sOpportunities: "✦ Oportunidades Estratégicas",
+    sRepresentative: "🔬 Empresas Representativas",
+    companiesNote: "Las empresas mostradas son representativas del sector. El ecosistema incluye más actores no listados públicamente por confidencialidad.",
+    sAbsoluteEvol: "Empresas por Sector — Evolución Absoluta 2023·2024·2025",
+    sChallengeMap: "Mapa de Desafíos por Sector (1-5)",
+    challengeHeader: "Desafío",
+    legendLow: "○ Bajo", legendMod: "● Moderado", legendHigh: "●● Alto", legendCrit: "●●●●● Crítico",
+    insightAbsolute: "AgriFood es el único sector que más que quintuplicó su número de empresas (6→34). HealthTech mantuvo número estable 2023-2024 pero duplicó en 2025.",
+    sGeo3: "Distribución Geográfica — 3 Años",
+    sRadar: "Capacidades por Nodo Regional (2025)",
+    sActors: "Actores del Ecosistema 2025",
+    actorLabels: ["Startups DeepTech","Grupos I+D","Programas Acel.","Inversionistas","Corporativos vinc.","Universidades"],
+    actorDescs: ["EBCTs mapeadas","50% en UNAL","+86 nuevos en 2025","únicos identificados","startups con vínculo","con prog. aceleración"],
+    sHuman: "Dimensión Humana 2025",
+    humanLabels: ["Startups con founder mujer","Empleados mujeres","Founders > 30 años","Vinculadas a universidades"],
+    humanStats: ["Empleos totales","Con Maestría/PhD","Empleos / empresa","Años promedio"],
+    sRD: "Inversión en I+D (% del PIB) — Benchmark Global",
+    rdPct: "% PIB",
+    insightGeo3: "Bogotá mantiene liderazgo pero Medellín pierde 9pp (33%→24%). El Oriente duplica participación. Ecosistema más diverso regionalmente.",
+    insightNetwork: "La densidad de red (corporativos + universidades + aceleradoras) se correlaciona directamente con madurez y acceso a capital de riesgo.",
+    insightRD: "Colombia invierte 0.34% del PIB en I+D. Alcanzar el 1% sería el catalizador más impactante para el ecosistema DeepTech.",
+    rdRows: [
+      {dim:"Inv. I+D (% PIB)", brasil:"1.3%", col:"0.34%"},
+      {dim:"Capital riesgo deeptech", brasil:"Alto y estable", col:"Bajo e intermitente"},
+      {dim:"Coord. ciencia-industria", brasil:"Alta (EMBRAPII)", col:"Media (CUEE)"},
+      {dim:"Fondos regionales", brasil:"FAPs autónomos", col:"SGR c/ aprobación"},
+      {dim:"Incentivos fiscales", brasil:"Lei do Bien (34%)", col:"Ded. 25-50%"},
+    ],
+    sFunding: "Fuentes de Financiamiento — Comparativo 3 Años",
+    noteFunding: "* 2023 estimado. 2024 multi-selección. 2025 fuente primaria.",
+    sCapValuation: "Capital & Valoraciones",
+    capRows: [
+      {label:"Capital Total 2025", value:"$108M USD", sub:"Primera vez > $100M — +80% vs 2024", bar:80},
+      {label:"Capital Total 2024", value:"$60M USD", sub:"Hito previo del ecosistema", bar:44},
+      {label:"Valoración 2025", value:"$676M USD", sub:"Metodología conservadora", bar:50},
+      {label:"Valoración 2024", value:"$853M USD", sub:"Concentrada en top 10% empresas", bar:63},
+      {label:"Startups con financ.", value:"56%", sub:"44% completamente autofinanciadas", bar:56},
+      {label:"Colombia vs Chile", value:"3X", sub:"Chile levanta 3X más con igual # EBCTs", bar:33},
+    ],
+    sReadiness: "Investment Readiness — Dimensiones Clave del Ecosistema",
+    readinessDims: [
+      {dim:"Equipo", desc:"Científico → Multidisciplinario"},
+      {dim:"Clientes", desc:"Idea → Clientes pagadores"},
+      {dim:"Prop. Intelectual", desc:"Sin estrategia → Familia patentes"},
+      {dim:"Fundraising", desc:"Pre-semilla → Serie C+"},
+      {dim:"TRL", desc:"Concepto → Uso operativo"},
+      {dim:"Gobernanza", desc:"Constitución → Gov. profesional"},
+      {dim:"Negocio", desc:"Idea → Escalabilidad probada"},
+      {dim:"Regulatorio", desc:"Sin identificar → Certificaciones"},
+    ],
+    maturityLabel: "Madurez ecosistema",
+    sLatam: "Contexto LATAM — Panorama de Inversión DeepTech",
+    latamCols: [
+      {title:"LATAM DeepTech", items:[{l:"Startups activas",v:"360+"},{l:"Empleos generados",v:"+10.000"},{l:"Capital recibido",v:"USD 865M"},{l:"Colombia / LATAM",v:"~12% startups"}]},
+      {title:"Colombia 2024", items:[{l:"Startups activas",v:"49 (56 est.)"},{l:"Scaleups",v:"2 (Bogotá + Med.)"},{l:"Valoración estimada",v:"USD 853M"},{l:"Financiación total",v:"USD 60M"}]},
+      {title:"Colombia 2025", items:[{l:"EBCTs mapeadas",v:"98"},{l:"Scaleups",v:"3+"},{l:"Valoración estimada",v:"USD 676M"},{l:"Financiación total",v:"USD 108M"}]},
+    ],
+    insightFunding: "58% bootstrapping en 2025: el mayor nivel registrado. El 75% de emprendedores identifica el acceso a capital como su barrera más crítica.",
+    insightReadiness: "El regulatorio es el cuello de botella crítico (nivel 1/5). Las empresas de HealthTech y AgriFood enfrentan barreras normativas que duplican sus tiempos de go-to-market.",
+    insightLatam: "Colombia representa ~12% del ecosistema DeepTech LATAM en número de startups, pero solo ~7% del capital levantado. La brecha de inversión es la mayor oportunidad de política pública.",
+    sODS: "Contribución a los ODS — 2024 vs 2025 (% de EBCTs)",
+    sBioeconomy: "Bioeconomía del Conocimiento — Palancas",
+    bioLevers: [
+      {icon:"🧬", title:"Nuevas Cadenas Productivas", desc:"Identificación y manejo de activos biológicos nativos para productos comerciales inéditos. Colombia: 2° país más biodiverso del mundo."},
+      {icon:"♻️", title:"Expansión por Valor Agregado", desc:"Industrialización de residuos agroindustriales en bioproductos avanzados. Circularidad como ventaja competitiva."},
+      {icon:"⚗️", title:"Transformación Biotecnológica", desc:"Edición genética y síntesis molecular para revolucionar industrias: farma, cosmética y agrícola."},
+    ],
+    biodiversityLink: "vinculadas a biodiversidad",
+    biodiversityRank: "país más biodiverso del mundo",
+    sKeyInsights: "Insights Clave 2023 → 2025",
+    keyInsights: [
+      {icon:"🚀", text:"El ecosistema triplicó startups en 2 años (32→98). El ritmo de crecimiento supera cualquier otro sector de innovación en Colombia.", color:"#00FF88"},
+      {icon:"♀", text:"Paridad de género en ascenso sostenido: 37.5% (2023) → 49% (2024) → 58% (2025). DeepTech CO lidera diversidad en LATAM.", color:"#A855F7"},
+      {icon:"🌾", text:"AgriFood Tech es la vertical ganadora (+15pp en 2 años). Colombia tiene ventaja comparativa real: biodiversidad + ciencias de la vida.", color:"#00FF88"},
+      {icon:"🤖", text:"IA converge con BioTech. El futuro es la biología computacional y los modelos de lenguaje para ciencias moleculares.", color:"#4ECDC4"},
+      {icon:"💸", text:"El bootstrapping dominante (58%) es señal de alarma: sin VC paciente, el 56% de proyectos en I+D/POC no alcanzará el mercado.", color:"#FF6B35"},
+      {icon:"🗺️", text:"Descentralización incipiente: Oriente duplicó (+6pp), nuevos focos en Pasto, Pereira y Yumbo. El ecosistema nacional está emergiendo.", color:"#FFD700"},
+    ],
+    sStrategic: "Retos Estructurales vs. Oportunidades — Vista 2025",
+    challengesLabel: "RETOS ESTRUCTURALES",
+    opportunitiesLabel: "OPORTUNIDADES ESTRATÉGICAS",
+    challenges: [
+      {t:"Acceso a capital de riesgo", d:"75% lo identifica como barrera #1. Colombia levanta 3X menos que Chile."},
+      {t:"Inversión pública en I+D", d:"0.34% del PIB vs. 1.3% de Brasil. Brecha: $3B USD anuales."},
+      {t:"Regulatorio y certif.", d:"Nivel 1/5 de madurez. FDA, INVIMA, RETIE frenan scaleups."},
+      {t:"Brecha ciencia-negocio", d:"56% en I+D/POC. Falta talent de 'traducción' científica al mercado."},
+      {t:"Articulación regional", d:"Medellín pierde tracción. Nodos emergentes sin masa crítica aún."},
+    ],
+    opportunities: [
+      {t:"Bioeconomía de alto valor", d:"Colombia: 2° más biodiverso + liderazgo regional en ciencias de la vida."},
+      {t:"AgriFood para 10B personas", d:"163 startups agrifoodtech + 3 corporativos top innovadores en alimentos."},
+      {t:"Transición energética justa", d:"País productor que puede liderar soluciones de descarbonización escalables."},
+      {t:"IA + BioTech convergente", d:"Ventana de 3-5 años para posicionarse en biología computacional LATAM."},
+      {t:"Talento cientifico joven", d:"67% founders > 30 años, 74% vinculados a universidades → pipeline fuerte."},
+    ],
+    insightODS: "Todos los ODS crecieron en 2025. ODS 13 Clima +8pp y ODS 2 Hambre +6pp: reflejo del boom AgriFood y la agenda climática.",
+    insightBioeconomy: "La bioeconomía basada en conocimiento podría multiplicarse 10X → USD 100-140B anuales para 2032 si Colombia cierra la brecha de inversión en I+D y acceso a capital de riesgo.",
+    footerSources: "Fuentes:",
+    footerNote: "* Datos 2023 parcialmente estimados a partir del análisis narrativo del reporte. * Metodologías de medición varían entre reportes.",
+    maturityStages: [
+      {name:"I+D / POC", desc:"Validación científica temprana"},
+      {name:"Des. Comercial", desc:"Aceleración y capital temprano"},
+      {name:"Crecimiento Global", desc:"Serie A y escalamiento"},
+    ],
+    sectores: [
+      {
+        tagline: "De la biodiversidad al plato del mundo",
+        description: "Tecnologías para transformar la cadena alimentaria global: cultivos de precisión, proteínas alternativas, bioinsumos y trazabilidad con IA.",
+        techs: ["BioTech", "IA / ML", "IoT Sensores", "Edición Genética", "Fermentación Avanzada"],
+        challenges: [
+          {t:"Marco regulatorio INVIMA", d:"Bioingredientes y alimentos funcionales sin ruta acelerada de aprobación."},
+          {t:"Infraestructura GMP", d:"Escasez de laboratorios certificados para escalar producción."},
+          {t:"Capital paciente", d:"Ciclos de I+D de 5-8 años desalineados con expectativas VC."},
+          {t:"Brecha tecnología-campo", d:"Adopción limitada por pequeños agricultores y cooperativas."},
+        ],
+        opportunities: ["Colombia: 2° más biodiverso → ingredientes únicos e irrepetibles","Demanda global de proteína alternativa (+300% para 2035)","Bioeconomía circular: residuos agroindustriales como materia prima","Exportación de soluciones a regiones tropicales similares"],
+        insight: "Vertical de mayor crecimiento: +15pp en 2 años. La ventaja comparativa de biodiversidad colombiana es estructural e irrepetible a nivel global.",
+      },
+      {
+        tagline: "Descarbonización basada en ciencia",
+        description: "Soluciones de base científica para transición energética, descarbonización industrial y eficiencia en el uso de recursos naturales.",
+        techs: ["NanoMateriales", "IA Predictiva", "IoT Industrial", "Electroquímica", "Fotovoltaico Avanzado"],
+        challenges: [
+          {t:"Marco regulatorio energético", d:"UPME y CREG con procesos lentos para tecnologías emergentes."},
+          {t:"Retorno de inversión largo", d:"CAPEX elevado y payback >7 años desincentivan al VC privado."},
+          {t:"Competencia de energías maduras", d:"Precios subsidiados del carbón/gas frenan la competencia."},
+          {t:"Escala mínima de prueba", d:"Pilotos industriales requieren clientes corporativos grandes."},
+        ],
+        opportunities: ["Transición energética justa con Ecopetrol como cliente ancla","Mercados de carbono voluntarios en expansión acelerada","Hidrógeno verde aprovechando recursos hídricos colombianos","Exportación de soluciones a LATAM con perfil energético similar"],
+        insight: "Bajó en % relativo por el boom AgriFood, pero creció en número absoluto. Materiales Sostenibles absorbió parte del portafolio histórico.",
+      },
+      {
+        tagline: "Ciencias de la vida de frontera",
+        description: "Dispositivos médicos avanzados, diagnóstico molecular, bioterapéuticos y aplicaciones de IA en salud con evidencia científica.",
+        techs: ["BioTech", "IA Diagnóstica", "Genómica", "Nanomedicina", "Telemedicina Científica"],
+        challenges: [
+          {t:"Aprobación INVIMA", d:"Procesos de 3-7 años para dispositivos y bioterapéuticos. Sin fast-track."},
+          {t:"Laboratorios bioseguridad", d:"Muy limitados. La investigación ocurre mayoritariamente en universidades públicas."},
+          {t:"Ensayos clínicos", d:"Costos de validación clínica inalcanzables sin financiación pública."},
+          {t:"Acceso a datos clínicos", d:"Fragmentación del sistema de salud dificulta datasets para IA."},
+        ],
+        opportunities: ["Colombia #1 LATAM en ciencias de la salud","30% de los mejores 62 hospitales LATAM están en Colombia","IA para diagnóstico de enfermedades tropicales únicas","Turismo médico + deeptech como diferenciador global"],
+        insight: "Fue la vertical dominante en 2023 (36%). La consolidación refleja especialización y madurez, no retroceso. INVIMA es el cuello de botella #1.",
+      },
+      {
+        tagline: "Materia prima del futuro",
+        description: "Nanomateriales funcionales, biomateriales, construcción sostenible e impresión 3D avanzada para industrias pesadas y manufactura.",
+        techs: ["NanoTech", "Impresión 3D", "Química Verde", "BioMateriales", "Simulación Molecular"],
+        challenges: [
+          {t:"Escalamiento lab → planta", d:"De gramos a toneladas manteniendo propiedades: el mayor cuello de botella."},
+          {t:"Certificación de materiales", d:"Normas ISO/ASTM para nuevos materiales demandan tiempo y presupuesto."},
+          {t:"Adopción industrial conservadora", d:"Manufactura y construcción cambian lentamente de proveedor."},
+          {t:"CAPEX infraestructura", d:"Equipos de síntesis y caracterización (SEM, XRD) muy costosos."},
+        ],
+        opportunities: ["Construcción sostenible con materiales bio-based en LATAM","Textiles técnicos biodegradables para industria de moda","Empaques biobased ante regulación anti-plástico global","Biominerales y materiales inteligentes para minería limpia"],
+        insight: "Vertical en ascenso sostenido (+9pp en 2 años). La confluencia con bioeconomía crea 'biomateriales funcionales', categoría única para Colombia.",
+      },
+    ],
+  },
+  en: {
+    headerSub: "COMPARATIVE REPORT 2023 · 2024 · 2025",
+    langBtn: "ES",
+    tabs: ["📊 Summary 2025","📈 3-Year Evolution","🏭 Sectors","🌐 Ecosystem","💸 Financing","🌱 Impact"],
+    kpiLabels: ["Mapped EBCTs","Capital Raised","Total Valuation","Jobs Created","Female Founder","Biodiversity Link."],
+    kpiSubs: ["+100% vs 2024","+80% vs 2024","USD estimated 2025","+64% vs 2024","+9pp vs 2024","Knowledge Bioeconomy"],
+    kpiInfos: [
+      "Science-Based Technology Companies (EBCTs) identified in Colombia in 2025. Includes active startups with demonstrable scientific basis. Grew 3x since 2023.",
+      "Total accumulated capital raised by EBCTs (equity, grants, convertible debt). First time the ecosystem exceeds USD 100M. Still 3x below Chile with the same number of startups.",
+      "Aggregated portfolio valuation using conservative methodology (revenue/capital multiple). The variation vs. 2024 reflects a methodological adjustment and a larger base of early-stage companies.",
+      "Full-time direct jobs generated by EBCTs in 2025. 22% of talent holds a Master's or PhD. DeepTech jobs generate 3-5x more economic value than the national average.",
+      "Percentage of EBCTs with at least one woman on the founding team. Colombia DeepTech leads gender diversity in LATAM, with a +20pp increase in just 2 years (2023→2025).",
+      "Percentage of EBCTs whose value proposition is directly linked to Colombia's biodiversity resources. Colombia is the 2nd most biodiverse country in the world — a unique competitive advantage.",
+    ],
+    sVerticals: "DeepTech Verticals 2025",
+    sTechs: "Enabling Technologies 2025",
+    sMaturity: "Technology Maturity 2025",
+    sGeo: "Geographic Distribution 2025",
+    insightAgriFood: "AgriFood grew +13pp — Colombia as a global agri-food power based on science and biodiversity.",
+    insightIA: "AI scales to 31% of primary adoption — BioTech declines due to portfolio specialization.",
+    insightMaturity: "56% still in R&D/POC → opportunity window for seed capital and scientific acceleration programs.",
+    insightGeo: "Emerging presence in Pasto, Pereira and Yumbo · Eastern region doubled its share (6%→12%) vs 2024.",
+    sEvolution: "DeepTech Colombia Ecosystem Evolution",
+    evolutionCards: [
+      {label:"EBCT Growth", val:"3.1x", sub:"32 → 49 → 98"},
+      {label:"Accumulated Capital", val:"+80%", sub:"$60M → $108M USD"},
+      {label:"Gender Parity", val:"+20pp", sub:"37.5% → 49% → 58%"},
+      {label:"AgriFood Tech", val:"+15pp", sub:"20% → 22% → 35%"},
+    ],
+    sStartups: "Mapped EBCTs / Startups",
+    sGender: "Gender Diversity — % Startups with Female Founder",
+    sCapital: "Capital Raised (USD Millions)",
+    sEmpleos: "Jobs Generated",
+    sVerticalsEvol: "Vertical Evolution — % EBCTs per Year",
+    note2023: "* 2023 estimated from report narrative (qualitative data). 2024 and 2025 are quantitative data.",
+    sTechEvol: "Enabling Technology Evolution",
+    noteTech: "* 2023: multi-selection (startups could indicate multiple techs, total >100%). 2024-2025: primary technology (sum ≈ 100%).",
+    insightStartups: "The ecosystem tripled in size in 2 years. The 2024→2025 jump (+100%) reflects methodological consolidation and mapping maturity.",
+    insightGender: "+20pp in 2 years: Colombia DeepTech leads gender diversity in LATAM. 49% women employees in 2025.",
+    insightCapital: "First time the ecosystem surpasses USD 100M in accumulated capital. Still 3X below Chile with the same # of startups.",
+    insightEmpleos: "22% with Master's/PhD. DeepTech jobs generate 3-5x more economic value than the national average.",
+    insightAgriEvol: "AgriFood: fastest-growing vertical. Biodiverse Colombia + global alternative protein demand = structural competitive advantage.",
+    insightEnergy: "Energy/Climate: dropped in relative % but grew in absolute numbers. The new \"CleanTech Materials\" category absorbed part of the demand.",
+    insightTech: "AI is converging with BioTech: the ecosystem is migrating toward solutions combining artificial intelligence with molecular biology.",
+    sectorHeader: "DeepTech Colombia Sectors — Comparative Analysis 2023 · 2024 · 2025",
+    sectorSubtitle: "Verticals, challenges, companies and trends by sector. Click on a sector to see details.",
+    selected: "Selected",
+    sectorDesc: "Sector Description",
+    enablingTechs: "Enabling Technologies",
+    companiesPerYear: "Companies per Year",
+    growth2023_2025: "Growth 2023 → 2025",
+    companies: "companies",
+    pctPortfolio: "% of total portfolio",
+    sChallenges: "⚠️ Sector Challenges",
+    sOpportunities: "✦ Strategic Opportunities",
+    sRepresentative: "🔬 Representative Companies",
+    companiesNote: "Companies shown are representative of the sector. The ecosystem includes more actors not listed publicly due to confidentiality.",
+    sAbsoluteEvol: "Companies by Sector — Absolute Evolution 2023·2024·2025",
+    sChallengeMap: "Sector Challenge Map (1-5)",
+    challengeHeader: "Challenge",
+    legendLow: "○ Low", legendMod: "● Moderate", legendHigh: "●● High", legendCrit: "●●●●● Critical",
+    insightAbsolute: "AgriFood is the only sector that more than quintupled its companies (6→34). HealthTech maintained stable numbers 2023-2024 but doubled in 2025.",
+    sGeo3: "Geographic Distribution — 3 Years",
+    sRadar: "Regional Node Capabilities (2025)",
+    sActors: "Ecosystem Actors 2025",
+    actorLabels: ["DeepTech Startups","R&D Groups","Accel. Programs","Investors","Linked Corporates","Universities"],
+    actorDescs: ["Mapped EBCTs","50% at UNAL","+86 new in 2025","uniquely identified","startups with link","with accel. programs"],
+    sHuman: "Human Dimension 2025",
+    humanLabels: ["Startups with female founder","Women employees","Founders > 30 years","Linked to universities"],
+    humanStats: ["Total jobs","With Master's/PhD","Jobs / company","Average years"],
+    sRD: "R&D Investment (% GDP) — Global Benchmark",
+    rdPct: "% GDP",
+    insightGeo3: "Bogotá maintains leadership but Medellín loses 9pp (33%→24%). Eastern region doubles its share. Regionally more diverse ecosystem.",
+    insightNetwork: "Network density (corporates + universities + accelerators) directly correlates with maturity and access to venture capital.",
+    insightRD: "Colombia invests 0.34% of GDP in R&D. Reaching 1% would be the most impactful catalyst for the DeepTech ecosystem.",
+    rdRows: [
+      {dim:"R&D Investment (% GDP)", brasil:"1.3%", col:"0.34%"},
+      {dim:"DeepTech venture capital", brasil:"High and stable", col:"Low and intermittent"},
+      {dim:"Science-industry coordination", brasil:"High (EMBRAPII)", col:"Medium (CUEE)"},
+      {dim:"Regional funds", brasil:"Autonomous FAPs", col:"SGR with approval"},
+      {dim:"Tax incentives", brasil:"Lei do Bem (34%)", col:"Ded. 25-50%"},
+    ],
+    sFunding: "Funding Sources — 3-Year Comparison",
+    noteFunding: "* 2023 estimated. 2024 multi-selection. 2025 primary source.",
+    sCapValuation: "Capital & Valuations",
+    capRows: [
+      {label:"Total Capital 2025", value:"$108M USD", sub:"First time > $100M — +80% vs 2024", bar:80},
+      {label:"Total Capital 2024", value:"$60M USD", sub:"Previous ecosystem milestone", bar:44},
+      {label:"Valuation 2025", value:"$676M USD", sub:"Conservative methodology", bar:50},
+      {label:"Valuation 2024", value:"$853M USD", sub:"Concentrated in top 10% companies", bar:63},
+      {label:"Funded startups", value:"56%", sub:"44% fully self-funded", bar:56},
+      {label:"Colombia vs Chile", value:"3X", sub:"Chile raises 3X more with same # EBCTs", bar:33},
+    ],
+    sReadiness: "Investment Readiness — Key Ecosystem Dimensions",
+    readinessDims: [
+      {dim:"Team", desc:"Scientific → Multidisciplinary"},
+      {dim:"Customers", desc:"Idea → Paying customers"},
+      {dim:"Intell. Property", desc:"No strategy → Patent portfolio"},
+      {dim:"Fundraising", desc:"Pre-seed → Series C+"},
+      {dim:"TRL", desc:"Concept → Operational use"},
+      {dim:"Governance", desc:"Incorporation → Professional gov."},
+      {dim:"Business", desc:"Idea → Proven scalability"},
+      {dim:"Regulatory", desc:"Unidentified → Certifications"},
+    ],
+    maturityLabel: "Ecosystem maturity",
+    sLatam: "LATAM Context — DeepTech Investment Landscape",
+    latamCols: [
+      {title:"LATAM DeepTech", items:[{l:"Active startups",v:"360+"},{l:"Jobs generated",v:"+10,000"},{l:"Capital received",v:"USD 865M"},{l:"Colombia / LATAM",v:"~12% startups"}]},
+      {title:"Colombia 2024", items:[{l:"Active startups",v:"49 (56 est.)"},{l:"Scaleups",v:"2 (Bogotá + Med.)"},{l:"Estimated valuation",v:"USD 853M"},{l:"Total financing",v:"USD 60M"}]},
+      {title:"Colombia 2025", items:[{l:"Mapped EBCTs",v:"98"},{l:"Scaleups",v:"3+"},{l:"Estimated valuation",v:"USD 676M"},{l:"Total financing",v:"USD 108M"}]},
+    ],
+    insightFunding: "58% bootstrapping in 2025: the highest level recorded. 75% of entrepreneurs identify access to capital as their most critical barrier.",
+    insightReadiness: "The regulatory environment is the critical bottleneck (level 1/5). HealthTech and AgriFood companies face regulatory barriers that double their go-to-market timelines.",
+    insightLatam: "Colombia represents ~12% of the LATAM DeepTech ecosystem in startups, but only ~7% of capital raised. The investment gap is the greatest public policy opportunity.",
+    sODS: "SDG Contribution — 2024 vs 2025 (% of EBCTs)",
+    sBioeconomy: "Knowledge Bioeconomy — Strategic Levers",
+    bioLevers: [
+      {icon:"🧬", title:"New Value Chains", desc:"Identification and management of native biological assets for unprecedented commercial products. Colombia: 2nd most biodiverse country in the world."},
+      {icon:"♻️", title:"Value-Added Expansion", desc:"Industrialization of agro-industrial waste into advanced bioproducts. Circularity as competitive advantage."},
+      {icon:"⚗️", title:"Biotechnological Transformation", desc:"Genetic editing and molecular synthesis to revolutionize industries: pharma, cosmetics and agriculture."},
+    ],
+    biodiversityLink: "linked to biodiversity",
+    biodiversityRank: "2nd most biodiverse country",
+    sKeyInsights: "Key Insights 2023 → 2025",
+    keyInsights: [
+      {icon:"🚀", text:"The ecosystem tripled startups in 2 years (32→98). Growth rate surpasses any other innovation sector in Colombia.", color:"#00FF88"},
+      {icon:"♀", text:"Gender parity on steady rise: 37.5% (2023) → 49% (2024) → 58% (2025). DeepTech CO leads diversity in LATAM.", color:"#A855F7"},
+      {icon:"🌾", text:"AgriFood Tech is the winning vertical (+15pp in 2 years). Colombia has a real comparative advantage: biodiversity + life sciences.", color:"#00FF88"},
+      {icon:"🤖", text:"AI converges with BioTech. The future is computational biology and language models for molecular sciences.", color:"#4ECDC4"},
+      {icon:"💸", text:"Dominant bootstrapping (58%) is a warning sign: without patient VC, 56% of R&D/POC projects won't reach market.", color:"#FF6B35"},
+      {icon:"🗺️", text:"Incipient decentralization: Eastern region doubled (+6pp), new hubs in Pasto, Pereira and Yumbo. National ecosystem emerging.", color:"#FFD700"},
+    ],
+    sStrategic: "Structural Challenges vs. Opportunities — 2025 View",
+    challengesLabel: "STRUCTURAL CHALLENGES",
+    opportunitiesLabel: "STRATEGIC OPPORTUNITIES",
+    challenges: [
+      {t:"Access to venture capital", d:"75% identify it as barrier #1. Colombia raises 3X less than Chile."},
+      {t:"Public R&D investment", d:"0.34% of GDP vs. 1.3% in Brazil. Gap: $3B USD annually."},
+      {t:"Regulatory & certification", d:"Level 1/5 maturity. FDA, INVIMA, RETIE slow down scaleups."},
+      {t:"Science-business gap", d:"56% in R&D/POC. Lack of scientific 'translation' talent for the market."},
+      {t:"Regional articulation", d:"Medellín losing traction. Emerging nodes lack critical mass yet."},
+    ],
+    opportunities: [
+      {t:"High-value bioeconomy", d:"Colombia: 2nd most biodiverse + regional leadership in life sciences."},
+      {t:"AgriFood for 10B people", d:"163 agrifoodtech startups + 3 top food innovator corporates."},
+      {t:"Just energy transition", d:"Producer country that can lead scalable decarbonization solutions."},
+      {t:"Converging AI + BioTech", d:"3-5 year window to position in LATAM computational biology."},
+      {t:"Young scientific talent", d:"67% founders > 30 years, 74% linked to universities → strong pipeline."},
+    ],
+    insightODS: "All SDGs grew in 2025. SDG 13 Climate +8pp and SDG 2 Hunger +6pp: reflecting the AgriFood boom and climate agenda.",
+    insightBioeconomy: "The knowledge-based bioeconomy could multiply 10X → USD 100-140B annually by 2032 if Colombia closes the R&D investment and venture capital gap.",
+    footerSources: "Sources:",
+    footerNote: "* 2023 data partially estimated from the report's narrative analysis. * Measurement methodologies vary across reports.",
+    maturityStages: [
+      {name:"R&D / POC", desc:"Early scientific validation"},
+      {name:"Commercial Dev.", desc:"Acceleration and early capital"},
+      {name:"Global Growth", desc:"Series A and scaling"},
+    ],
+    sectores: [
+      {
+        tagline: "From biodiversity to the world's plate",
+        description: "Technologies to transform the global food chain: precision crops, alternative proteins, bio-inputs and AI-powered traceability.",
+        techs: ["BioTech", "AI / ML", "IoT Sensors", "Gene Editing", "Advanced Fermentation"],
+        challenges: [
+          {t:"INVIMA regulatory framework", d:"Bio-ingredients and functional foods lack an accelerated approval pathway."},
+          {t:"GMP infrastructure", d:"Shortage of certified laboratories for scaling production."},
+          {t:"Patient capital", d:"5-8 year R&D cycles misaligned with VC expectations."},
+          {t:"Tech-field gap", d:"Limited adoption by small farmers and cooperatives."},
+        ],
+        opportunities: ["Colombia: 2nd most biodiverse → unique and unrepeatable ingredients","Global demand for alternative protein (+300% by 2035)","Circular bioeconomy: agro-industrial waste as raw material","Export solutions to similar tropical regions"],
+        insight: "Fastest-growing vertical: +15pp in 2 years. Colombia's biodiversity comparative advantage is structural and globally irreplicable.",
+      },
+      {
+        tagline: "Science-based decarbonization",
+        description: "Science-based solutions for energy transition, industrial decarbonization and efficient use of natural resources.",
+        techs: ["NanoMaterials", "Predictive AI", "Industrial IoT", "Electrochemistry", "Advanced Photovoltaic"],
+        challenges: [
+          {t:"Energy regulatory framework", d:"UPME and CREG with slow processes for emerging technologies."},
+          {t:"Long ROI", d:"High CAPEX and payback >7 years discourage private VC."},
+          {t:"Competition from mature energy", d:"Subsidized coal/gas prices hinder competitiveness."},
+          {t:"Minimum test scale", d:"Industrial pilots require large corporate clients."},
+        ],
+        opportunities: ["Just energy transition with Ecopetrol as anchor client","Rapidly expanding voluntary carbon markets","Green hydrogen leveraging Colombian water resources","Export solutions to LATAM with similar energy profile"],
+        insight: "Dropped in relative % due to AgriFood boom, but grew in absolute numbers. Sustainable Materials absorbed part of the historical portfolio.",
+      },
+      {
+        tagline: "Frontier life sciences",
+        description: "Advanced medical devices, molecular diagnostics, biotherapeutics and evidence-based AI applications in healthcare.",
+        techs: ["BioTech", "Diagnostic AI", "Genomics", "Nanomedicine", "Scientific Telemedicine"],
+        challenges: [
+          {t:"INVIMA approval", d:"3-7 year processes for devices and biotherapeutics. No fast-track."},
+          {t:"Biosafety labs", d:"Very limited. Research occurs mainly at public universities."},
+          {t:"Clinical trials", d:"Clinical validation costs unreachable without public funding."},
+          {t:"Access to clinical data", d:"Healthcare system fragmentation complicates AI datasets."},
+        ],
+        opportunities: ["Colombia #1 LATAM in health sciences","30% of the top 62 LATAM hospitals are in Colombia","AI for diagnosis of unique tropical diseases","Medical tourism + deeptech as global differentiator"],
+        insight: "Was the dominant vertical in 2023 (36%). Consolidation reflects specialization and maturity, not decline. INVIMA is the #1 bottleneck.",
+      },
+      {
+        tagline: "Raw material of the future",
+        description: "Functional nanomaterials, biomaterials, sustainable construction and advanced 3D printing for heavy industries and manufacturing.",
+        techs: ["NanoTech", "3D Printing", "Green Chemistry", "BioMaterials", "Molecular Simulation"],
+        challenges: [
+          {t:"Lab → plant scale-up", d:"From grams to tons maintaining properties: the biggest bottleneck."},
+          {t:"Materials certification", d:"ISO/ASTM standards for new materials demand time and budget."},
+          {t:"Conservative industrial adoption", d:"Manufacturing and construction change suppliers slowly."},
+          {t:"Infrastructure CAPEX", d:"Synthesis and characterization equipment (SEM, XRD) very costly."},
+        ],
+        opportunities: ["Sustainable construction with bio-based materials in LATAM","Biodegradable technical textiles for fashion industry","Bio-based packaging facing global anti-plastic regulation","Biominerals and smart materials for clean mining"],
+        insight: "Steadily rising vertical (+9pp in 2 years). The confluence with bioeconomy creates 'functional biomaterials', a unique category for Colombia.",
+      },
+    ],
+  },
+};
+
 /* ─── DESIGN TOKENS ─── */
 const C = {
   primary: "#00FF88", secondary: "#00CC66", accent: "#00FFAA",
@@ -457,14 +887,16 @@ export default function Dashboard() {
   const [tab, setTab] = useState("resumen");
 
   const [selectedSector, setSelectedSector] = useState("agrifood");
+  const [lang, setLang] = useState("es");
+  const tr = T[lang];
 
   const tabs = [
-    { id: "resumen",     label: "📊 Resumen 2025" },
-    { id: "evolucion",  label: "📈 Evolución 3 Años" },
-    { id: "sectores",   label: "🏭 Sectores" },
-    { id: "ecosistema", label: "🌐 Ecosistema" },
-    { id: "financiacion",label: "💸 Financiación" },
-    { id: "impacto",    label: "🌱 Impacto" },
+    { id: "resumen",      label: tr.tabs[0] },
+    { id: "evolucion",   label: tr.tabs[1] },
+    { id: "sectores",    label: tr.tabs[2] },
+    { id: "ecosistema",  label: tr.tabs[3] },
+    { id: "financiacion",label: tr.tabs[4] },
+    { id: "impacto",     label: tr.tabs[5] },
   ];
 
   return (
@@ -489,7 +921,7 @@ export default function Dashboard() {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.primary, animation: "pulse 2s infinite", boxShadow: `0 0 12px ${C.primary}` }} />
-              <span style={{ fontSize: 10, letterSpacing: "0.2em", color: C.muted }}>REPORTE COMPARATIVO 2023 · 2024 · 2025</span>
+              <span style={{ fontSize: 10, letterSpacing: "0.2em", color: C.muted }}>{tr.headerSub}</span>
             </div>
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: C.primary, fontFamily: "'Syne', sans-serif", letterSpacing: "-0.02em" }}>
               DEEPTECH COLOMBIA <span style={{ color: C.text }}>DASHBOARD</span>
@@ -499,6 +931,20 @@ export default function Dashboard() {
             </div>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button
+              onClick={() => setLang(l => l === "es" ? "en" : "es")}
+              style={{
+                padding: "8px 16px", borderRadius: 8,
+                border: `1px solid ${C.primary}`,
+                background: `${C.primary}15`,
+                color: C.primary,
+                cursor: "pointer", fontSize: 11,
+                fontFamily: "'Space Mono', monospace",
+                fontWeight: 700, transition: "all 0.2s ease",
+                letterSpacing: "0.1em",
+                alignSelf: "center",
+              }}
+            >{tr.langBtn}</button>
             {tabs.map(t => (
               <button key={t.id} onClick={() => setTab(t.id)} style={{
                 padding: "8px 14px", borderRadius: 8, border: "1px solid",
@@ -522,13 +968,13 @@ export default function Dashboard() {
           <div>
             {/* KPI GRID */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 14, marginBottom: 28 }}>
-              {metrics2025.map((m, i) => <KPICard key={i} metric={m} index={i} />)}
+              {metrics2025.map((m, i) => <KPICard key={i} metric={{...m, label: tr.kpiLabels[i], sub: tr.kpiSubs[i], info: tr.kpiInfos[i]}} index={i} />)}
             </div>
 
             {/* VERTICALS + TECH */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
               <Card infoText="Distribución porcentual de las 98 EBCTs por sector de aplicación en 2025. Las barras comparan el % actual vs. el peso en 2024. Las flechas indican crecimiento (↑) o contracción (↓) en puntos porcentuales.">
-                <SectionTitle>Verticales DeepTech 2025</SectionTitle>
+                <SectionTitle>{tr.sVerticals}</SectionTitle>
                 {[
                   { name: "AgriFood Tech",     value: 35, prev: 22, color: C.primary },
                   { name: "CleanTech Materiales",value: 25, prev: 20, color: C.blue },
@@ -553,13 +999,11 @@ export default function Dashboard() {
                     <div style={{ fontSize: 9, color: C.muted, marginTop: 3 }}>2024: {v.prev}%</div>
                   </div>
                 ))}
-                <InsightBox color={C.primary} icon="🌱">
-                  AgriFood creció <strong>+13pp</strong> — Colombia como potencia agroalimentaria global basada en ciencia y biodiversidad.
-                </InsightBox>
+                <InsightBox color={C.primary} icon="🌱">{tr.insightAgriFood}</InsightBox>
               </Card>
 
               <Card infoText="Mapa de calor (treemap) de la tecnología primaria usada por cada EBCT en 2025. El área de cada bloque representa la proporción del portafolio. IA lidera con 31%, seguida de BioTech (21%) e IoT (19%)." infoColor={C.blue}>
-                <SectionTitle accent={C.blue}>Tecnologías Habilitantes 2025</SectionTitle>
+                <SectionTitle accent={C.blue}>{tr.sTechs}</SectionTitle>
                 <ResponsiveContainer width="100%" height={220}>
                   <Treemap data={techData2025} dataKey="value" content={<TreemapContent />} isAnimationActive={false} />
                 </ResponsiveContainer>
@@ -571,16 +1015,14 @@ export default function Dashboard() {
                     </div>
                   ))}
                 </div>
-                <InsightBox color={C.blue} icon="🤖">
-                  IA escala al <strong>31%</strong> de primaria adoption — BioTech baja por especialización del portafolio (más startups puras de biotech).
-                </InsightBox>
+                <InsightBox color={C.blue} icon="🤖">{tr.insightIA}</InsightBox>
               </Card>
             </div>
 
             {/* MATURITY + GEO */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               <Card infoText="Nivel de madurez tecnológica (TRL) del portafolio 2025. I+D/POC = validación científica inicial. Desarrollo Comercial = producto con primeros clientes. Crecimiento Global = escala con Serie A+. El 56% aún en etapas tempranas." infoColor={C.purple}>
-                <SectionTitle accent={C.purple}>Madurez Tecnológica 2025</SectionTitle>
+                <SectionTitle accent={C.purple}>{tr.sMaturity}</SectionTitle>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {maturity2025.map((m, i) => (
                     <div key={i} style={{ background: C.border, borderRadius: 10, padding: "14px 18px", border: `1px solid ${m.color}30`, display: "flex", alignItems: "center", gap: 16 }}>
@@ -593,19 +1035,17 @@ export default function Dashboard() {
                         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900, color: m.color }}>{m.value}%</div>
                       </div>
                       <div>
-                        <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 3 }}>{m.name}</div>
-                        <div style={{ fontSize: 10, color: C.muted }}>{m.desc}</div>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 3 }}>{tr.maturityStages[i].name}</div>
+                        <div style={{ fontSize: 10, color: C.muted }}>{tr.maturityStages[i].desc}</div>
                       </div>
                     </div>
                   ))}
                 </div>
-                <InsightBox color={C.purple} icon="⚗️">
-                  <strong>56%</strong> aún en I+D/POC → ventana de oportunidad para capital semilla y programas de aceleración científica.
-                </InsightBox>
+                <InsightBox color={C.purple} icon="⚗️">{tr.insightMaturity}</InsightBox>
               </Card>
 
               <Card infoText="Distribución geográfica de las 98 EBCTs por ciudad/región en 2025. Bogotá lidera con 44%, Medellín 24%. El Oriente duplicó participación (6%→12%). Aparecen nuevos focos en Pasto, Pereira y Yumbo." infoColor={C.warn}>
-                <SectionTitle accent={C.warn}>Distribución Geográfica 2025</SectionTitle>
+                <SectionTitle accent={C.warn}>{tr.sGeo}</SectionTitle>
                 <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
                   <ResponsiveContainer width="60%" height={200}>
                     <PieChart>
@@ -626,9 +1066,7 @@ export default function Dashboard() {
                     ))}
                   </div>
                 </div>
-                <InsightBox color={C.warn} icon="🏙️">
-                  Aparición incipiente en Pasto, Pereira y Yumbo · <strong>Oriente</strong> duplicó participación (6%→12%) vs 2024.
-                </InsightBox>
+                <InsightBox color={C.warn} icon="🏙️">{tr.insightGeo}</InsightBox>
               </Card>
             </div>
           </div>
@@ -642,7 +1080,7 @@ export default function Dashboard() {
             {/* YEAR BADGES + TITLE */}
             <div style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <h2 style={{ margin: 0, fontSize: 16, color: C.primary, fontFamily: "'Syne',sans-serif" }}>
-                Evolución del Ecosistema DeepTech Colombia
+                {tr.sEvolution}
               </h2>
               {["2023", "2024", "2025"].map(y => <YearBadge key={y} year={y} />)}
             </div>
@@ -650,10 +1088,10 @@ export default function Dashboard() {
             {/* KEY INSIGHT CARDS */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 28 }}>
               {[
-                { label: "Crecimiento EBCTs", val: "3.1x", sub: "32 → 49 → 98", color: C.primary, icon: "🚀" },
-                { label: "Capital acumulado", val: "+80%", sub: "$60M → $108M USD", color: C.warn, icon: "💰" },
-                { label: "Paridad de género", val: "+20pp", sub: "37.5% → 49% → 58%", color: C.purple, icon: "♀" },
-                { label: "AgriFood Tech", val: "+15pp", sub: "20% → 22% → 35%", color: C.blue, icon: "🌱" },
+                { ...tr.evolutionCards[0], color: C.primary, icon: "🚀" },
+                { ...tr.evolutionCards[1], color: C.warn, icon: "💰" },
+                { ...tr.evolutionCards[2], color: C.purple, icon: "♀" },
+                { ...tr.evolutionCards[3], color: C.blue, icon: "🌱" },
               ].map((s, i) => (
                 <div key={i} style={{
                   background: `${s.color}10`, border: `1px solid ${s.color}30`,
@@ -671,7 +1109,7 @@ export default function Dashboard() {
             {/* LINE CHARTS — STARTUPS + GENDER */}
             <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 20, marginBottom: 20 }}>
               <Card infoText="Evolución del número total de EBCTs (Empresas de Base Científico-Tecnológica) mapeadas en Colombia de 2023 a 2025. El crecimiento de 32→49→98 refleja tanto la expansión real del ecosistema como la mejora en metodología de mapeo.">
-                <SectionTitle>EBCTs / Startups Mapeadas</SectionTitle>
+                <SectionTitle>{tr.sStartups}</SectionTitle>
                 <ResponsiveContainer width="100%" height={220}>
                   <LineChart data={startupsLine} margin={{ top: 10, right: 20, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={C.border} />
@@ -704,13 +1142,11 @@ export default function Dashboard() {
                     </div>
                   ))}
                 </div>
-                <InsightBox color={C.primary} icon="📈">
-                  El ecosistema <strong>triplicó su tamaño en 2 años</strong>. El salto 2024→2025 (+100%) refleja una consolidación metodológica y la madurez del mapeo.
-                </InsightBox>
+                <InsightBox color={C.primary} icon="📈">{tr.insightStartups}</InsightBox>
               </Card>
 
               <Card infoText="Porcentaje de EBCTs con al menos una mujer en el equipo fundador, medido en cada reporte anual. Colombia DeepTech es el ecosistema con mayor diversidad de género en LATAM, alcanzando 58% en 2025 frente al promedio regional de ~30%." infoColor={C.purple}>
-                <SectionTitle accent={C.purple}>Diversidad de Género — % Startups con Fundadora</SectionTitle>
+                <SectionTitle accent={C.purple}>{tr.sGender}</SectionTitle>
                 <ResponsiveContainer width="100%" height={220}>
                   <LineChart data={genderLine} margin={{ top: 10, right: 20, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={C.border} />
@@ -722,16 +1158,14 @@ export default function Dashboard() {
                       activeDot={{ r: 8, fill: C.purple }} />
                   </LineChart>
                 </ResponsiveContainer>
-                <InsightBox color={C.purple} icon="👩‍🔬">
-                  <strong>+20pp en 2 años</strong>: Colombia DeepTech lidera diversidad de género en LATAM. 49% empleados mujeres en 2025.
-                </InsightBox>
+                <InsightBox color={C.purple} icon="👩‍🔬">{tr.insightGender}</InsightBox>
               </Card>
             </div>
 
             {/* CAPITAL + EMPLEOS */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
               <Card infoText="Monto total de capital levantado (USD millones) acumulado por el ecosistema en 2024 y 2025. Incluye inversión equity, grants públicos y deuda convertible. No disponible en 2023 por ausencia de medición sistemática." infoColor={C.warn}>
-                <SectionTitle accent={C.warn}>Capital Levantado (USD Millones)</SectionTitle>
+                <SectionTitle accent={C.warn}>{tr.sCapital}</SectionTitle>
                 <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={capitalLine} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={C.border} />
